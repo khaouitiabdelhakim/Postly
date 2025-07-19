@@ -4,6 +4,9 @@ A full-stack social media web application built with React, TypeScript, FastAPI,
 
 > **📚 Educational Purpose**: This project serves as a comprehensive tutorial to learn both FastAPI and React in a modern way, created by Abdelhakim KHAOUITI - AI Software Engineer specializing in full-stack development and modern web technologies.
 
+## Class diagram
+![Class diagram](https://github.com/khaouitiabdelhakim/Postly/blob/main/class%20diagram.png)
+
 ## 🚀 Features
 
 ### 🔐 Authentication & User Management
