@@ -7,3 +7,4 @@ sqlalchemy
 python-dotenv
 pydantic[email]
 pydantic-settings
+psycopg2-binary
