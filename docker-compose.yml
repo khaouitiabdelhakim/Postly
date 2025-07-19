@@ -1,0 +1,47 @@
+services:
+  # API service
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile.dev
+    container_name: postly_api_dev
+    environment:
+      - DATABASE_URL=sqlite:///./postly.db
+      - SECRET_KEY=your-secret-key-change-this-in-production
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - ENVIRONMENT=development
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./api:/app
+      - ./postly.db:/app/postly.db
+    networks:
+      - postly_network
+    restart: unless-stopped
+    command: ["python", "run.py"]
+
+  # Client service
+  client:
+    build:
+      context: .
+      dockerfile: docker/client/Dockerfile.dev
+    container_name: postly_client_dev
+    environment:
+      - VITE_API_URL=http://localhost:8001
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - postly_network
+    restart: unless-stopped
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+
+# Networks
+networks:
+  postly_network:
+    driver: bridge
+    name: postly_network
