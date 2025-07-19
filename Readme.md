@@ -2,6 +2,8 @@
 
 A full-stack social media web application built with React, TypeScript, FastAPI, and SQLite. Postly allows users to create accounts, share posts with text and images, and interact with a modern, responsive interface.
 
+> **📚 Educational Purpose**: This project serves as a comprehensive tutorial to learn both FastAPI and React in a modern way, created by Abdelhakim KHAOUITI - AI Software Engineer specializing in full-stack development and modern web technologies.
+
 ## 🚀 Features
 
 ### 🔐 Authentication & User Management
@@ -232,11 +234,16 @@ python run.py
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under a custom MIT License with Educational and Commercial Use Guidelines - see the [LICENSE](LICENSE) file for details.
+
+**📚 Educational Use**: Free for all educational purposes, learning, and tutorials.  
+**💼 Commercial Use**: For commercial applications and cloud deployment support, contact [KHAOUITI Apps](https://www.khaouitiapps.com/price).
 
 ## 👥 Authors
 
-- **Khaouiti Abdelhakim** - *Initial work* - [@khaouitiabdelhakim](https://github.com/khaouitiabdelhakim)
+- **Abdelhakim KHAOUITI** - *Creator & AI Software Engineer* - [@khaouitiabdelhakim](https://github.com/khaouitiabdelhakim)
+  
+  AI Software Engineer at Leyton CognitX @ENSIAS specializing in Transformers, AI agents, and LLMs. Technical expertise built on 3+ years of mobile development (Kotlin/Java) and 2.5+ years of full-stack experience (Laravel, Spring Boot, Angular, React, Vue, Django, FastAPI and more). Co-founder of Progma Academy and owner of [KHAOUITI Apps](https://www.khaouitiapps.com).
 
 ## 🙏 Acknowledgments
 
