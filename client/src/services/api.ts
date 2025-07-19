@@ -99,7 +99,12 @@ class ApiService {
   async getPosts(skip: number = 0, limit: number = 10): Promise<ApiResponse<Post[]>> {
     try {
       const response = await this.api.get<Post[]>(`/posts?skip=${skip}&limit=${limit}`);
-      return this.handleResponse(response);
+      // Transform blob URLs to full URLs
+  
+      return {
+        data: response.data,
+        success: true
+      };
     } catch (error) {
       return this.handleError(error);
     }
@@ -108,7 +113,15 @@ class ApiService {
   async getPost(postId: string): Promise<ApiResponse<Post>> {
     try {
       const response = await this.api.get<Post>(`/posts/${postId}`);
-      return this.handleResponse(response);
+      // Transform blob URL to full URL
+      const postWithFullUrl = {
+        ...response.data,
+        blobUrl: response.data.blobUrl ? `${this.baseURL}/posts/media/${response.data.blobUrl}` : null
+      };
+      return {
+        data: postWithFullUrl,
+        success: true
+      };
     } catch (error) {
       return this.handleError(error);
     }
@@ -117,7 +130,15 @@ class ApiService {
   async createPost(postData: CreatePostRequest): Promise<ApiResponse<Post>> {
     try {
       const response = await this.api.post<Post>('/posts', postData);
-      return this.handleResponse(response);
+      // Transform blob URL to full URL
+      const postWithFullUrl = {
+        ...response.data,
+        blobUrl: response.data.blobUrl ? `${this.baseURL}/posts/media/${response.data.blobUrl}` : null
+      };
+      return {
+        data: postWithFullUrl,
+        success: true
+      };
     } catch (error) {
       return this.handleError(error);
     }
@@ -126,7 +147,15 @@ class ApiService {
   async updatePost(postId: string, postData: UpdatePostRequest): Promise<ApiResponse<Post>> {
     try {
       const response = await this.api.put<Post>(`/posts/${postId}`, postData);
-      return this.handleResponse(response);
+      // Transform blob URL to full URL
+      const postWithFullUrl = {
+        ...response.data,
+        blobUrl: response.data.blobUrl ? `${this.baseURL}/posts/media/${response.data.blobUrl}` : null
+      };
+      return {
+        data: postWithFullUrl,
+        success: true
+      };
     } catch (error) {
       return this.handleError(error);
     }
@@ -146,7 +175,7 @@ class ApiService {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await this.api.post<UploadResponse>(
+      const response = await this.api.post<{ message: string; blob_url: string }>(
         `/posts/${postId}/upload`,
         formData,
         {
@@ -155,7 +184,34 @@ class ApiService {
           },
         }
       );
-      return this.handleResponse(response);
+      
+      // Transform the blob URL to a full URL and match our interface
+      const responseWithFullUrl: UploadResponse = {
+        message: response.data.message,
+        blobUrl: `${this.baseURL}/posts/media/${response.data.blob_url}`
+      };
+      
+      return {
+        data: responseWithFullUrl,
+        success: true
+      };
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  async getUserPosts(userId: string, skip: number = 0, limit: number = 10): Promise<ApiResponse<Post[]>> {
+    try {
+      const response = await this.api.get<Post[]>(`/posts/users/${userId}?skip=${skip}&limit=${limit}`);
+      // Transform blob URLs to full URLs
+      const postsWithFullUrls = response.data.map(post => ({
+        ...post,
+        blobUrl: post.blobUrl ? `${this.baseURL}/posts/media/${post.blobUrl}` : null
+      }));
+      return {
+        data: postsWithFullUrls,
+        success: true
+      };
     } catch (error) {
       return this.handleError(error);
     }

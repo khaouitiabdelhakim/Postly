@@ -7,9 +7,7 @@ import {
   MoreHorizontal, 
   Edit3, 
   Trash2, 
-  Upload, 
-  Image as ImageIcon,
-  X 
+  Upload
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -94,7 +92,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onUpdate, onDelete }) => {
     try {
       const response = await apiService.uploadMedia(post.id, file);
       if (response.success && response.data) {
-        // Update the post with the new blob URL
+        // Update the post with the new blob URL (already full URL from backend)
         const updatedPost = { ...post, blobUrl: response.data.blobUrl };
         onUpdate(updatedPost);
         toast.success('Image uploaded successfully!');
@@ -227,8 +225,25 @@ const PostCard: React.FC<PostCardProps> = ({ post, onUpdate, onDelete }) => {
                 alt="Post attachment"
                 className="w-full h-auto max-h-96 object-cover"
                 onError={(e) => {
+                  console.error('Failed to load image:', post.blobUrl);
+                  console.error('Image error event:', e);
+                  console.error('Network status:', navigator.onLine);
+                  // Test if we can fetch the URL directly
+                  if (post.blobUrl) {
+                    fetch(post.blobUrl)
+                      .then(response => {
+                        console.log('Fetch response status:', response.status);
+                        console.log('Fetch response headers:', response.headers);
+                      })
+                      .catch(fetchError => {
+                        console.error('Fetch error:', fetchError);
+                      });
+                  }
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
+                }}
+                onLoad={() => {
+                  console.log('Image loaded successfully:', post.blobUrl);
                 }}
               />
             </div>

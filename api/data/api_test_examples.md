@@ -134,7 +134,7 @@ Content-Type: application/json
     "id": "post_987654322",
     "userId": "user_123456789",
     "text": "Beautiful sunset today! 🌅 #nature #photography",
-    "blobUrl": "https://example.com/blob/sunset.jpg",
+    "blobUrl": "http://localhost:8001/posts/media/725895a9-a464-488b-b2a0-65c57154867d.jpg",
     "createdAt": "2025-07-19T12:30:00"
   }
 ]
@@ -236,7 +236,7 @@ Content-Type: multipart/form-data
 ```json
 {
   "message": "Media uploaded successfully",
-  "blobUrl": "https://example.com/blob/uploaded_image.jpg"
+  "blobUrl": "http://localhost:8001/posts/media/uploaded_image.jpg"
 }
 ```
 

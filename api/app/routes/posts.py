@@ -1,11 +1,14 @@
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, UploadFile, HTTPException
+from fastapi.responses import FileResponse
 from typing import List
+import os
 from sqlalchemy.orm import Session
 from app.controllers.posts import PostController
-from app.schemas.post import PostCreate, PostUpdate, PostResponse, PostListResponse
+from app.schemas.post import PostCreate, PostUpdate, PostResponse
 from app.utils.dependencies import get_current_user
 from app.models.user import User
 from app.database import get_db
+from app.config import settings
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
@@ -51,6 +54,24 @@ def upload_media(
 ):
     return PostController.upload_media(post_id, file, current_user, db)
 
-@router.get("/users/{user_id}", response_model=List[PostListResponse])
+@router.get("/users/{user_id}", response_model=List[PostResponse])
 def get_user_posts(user_id: str, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return PostController.get_user_posts(db, user_id, skip, limit)
+
+@router.get("/media/{filename}")
+def serve_media(filename: str):
+    """Serve uploaded media files"""
+    file_path = os.path.join(settings.upload_dir, filename)
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(
+        file_path,
+        headers={
+            "Cache-Control": "public, max-age=3600",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "*"
+        }
+    )
