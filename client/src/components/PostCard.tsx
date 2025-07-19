@@ -28,6 +28,23 @@ const PostCard: React.FC<PostCardProps> = ({ post, onUpdate, onDelete }) => {
 
   const isOwner = user?.id === post.userId || user?.id === post.owner?.id;
 
+  // Function to parse text and style hashtags
+  const parseHashtags = (text: string) => {
+    const hashtagRegex = /(#[a-zA-Z0-9_]+)/g;
+    const parts = text.split(hashtagRegex);
+    
+    return parts.map((part, index) => {
+      if (hashtagRegex.test(part)) {
+        return (
+          <span key={index} className="text-blue-600 font-medium">
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
+
   const handleEdit = async () => {
     if (!editText.trim()) {
       toast.error('Post cannot be empty');
@@ -214,7 +231,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onUpdate, onDelete }) => {
       ) : (
         <div className="space-y-4">
           <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">
-            {post.text}
+            {parseHashtags(post.text)}
           </p>
 
           {/* Image */}
