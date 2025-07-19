@@ -1,3 +1,7 @@
 api/env
+api/uploads/
 api/.env
+api/postly.db
 **/__pycache__/
+client/node_modules/
+client/package-lock.json

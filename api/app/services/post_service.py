@@ -68,8 +68,10 @@ class PostService:
             )
         
         # Delete associated file if exists
-        if post.blobUrl and os.path.exists(post.blobUrl):
-            os.remove(post.blobUrl)
+        if post.blobUrl:
+            file_path = f"{settings.upload_dir}/{post.blobUrl}"
+            if os.path.exists(file_path):
+                os.remove(file_path)
         
         db.delete(post)
         db.commit()
@@ -104,8 +106,8 @@ class PostService:
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        # Update post with file URL
-        post.blobUrl = file_path
+        # Update post with file URL (store just the filename for serving via endpoint)
+        post.blobUrl = file_name
         db.commit()
         
-        return file_path
+        return file_name
